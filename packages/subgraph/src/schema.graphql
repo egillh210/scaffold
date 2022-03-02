@@ -20,25 +20,23 @@ type Trader @entity {
   id: ID!
   address: Bytes!
   createdAt: BigInt!
-  openPositions: [Position]
-  closedPositions: [Position]
+  openPositions: [[Position]]
+  closedPositions: [[Position]]
   totalPositionsCount: BigInt!
 }
 
 
 ['yWETHDAI1231', 'yWETHDAI0331', 'yWBTCDAI1231', 'yWBTCDAI0331']
 
-enum Instruments {
+
+enum SupportedSymbol {
   ETHDAI
   BTCDAI
 }
 
-
 type Instrument @entity {
   id: ID!
-  symbol: String!
-  base: String!
-  quote: String!
+  symbol: SupportedSymbol!
   maturity: BigInt!
 }
 
@@ -47,18 +45,15 @@ enum LiquiditySource {
   NOTIONAL
 }
 
-type PositionData @entity {
+type Position @entity {
+  id: ID!
+  positionId: Int!
+  createdAt: BigInt!
+  instrument: Instrument!
   collateral: BigInt!
   openQuantity: BigInt!
   openCost: BigInt!
   protocolFees: BigInt!
   leverage: Int!
-  maturity: BigInt!
   liquiditySource: LiquiditySource!
-}
-
-type Position @entity {
-  id: ID!
-  instrument: Instrument!
-  positionData: PositionData!
 }
