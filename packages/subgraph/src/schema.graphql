@@ -14,35 +14,18 @@ type Sender @entity {
   purposeCount: BigInt!
 }
 
-_-----------
-
-type Trader @entity {
-  id: ID!
-  address: Bytes!
-  createdAt: BigInt!
-  openPositions: [[Position]]
-  closedPositions: [[Position]]
-  totalPositionsCount: BigInt!
-}
-
-
-['yWETHDAI1231', 'yWETHDAI0331', 'yWBTCDAI1231', 'yWBTCDAI0331']
-
-
-enum SupportedSymbol {
-  ETHDAI
-  BTCDAI
+enum LiquiditySource {
+  YIELD
+  NOTIONAL
 }
 
 type Instrument @entity {
   id: ID!
-  symbol: SupportedSymbol!
+  base: String!
+  quote: String!
+  liquiditySource: LiquiditySource
   maturity: BigInt!
-}
-
-enum LiquiditySource {
-  YIELD
-  NOTIONAL
+  symbol: String!
 }
 
 type Position @entity {
@@ -55,5 +38,13 @@ type Position @entity {
   openCost: BigInt!
   protocolFees: BigInt!
   leverage: Int!
-  liquiditySource: LiquiditySource!
+}
+
+type Trader @entity {
+  id: ID!
+  address: Bytes!
+  createdAt: BigInt!
+  openPositions: [[Position!]!]
+  closedPositions: [[Position!]!]
+  totalPositionsCount: BigInt!
 }

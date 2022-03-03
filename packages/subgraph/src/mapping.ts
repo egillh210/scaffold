@@ -1,33 +1,23 @@
-import { BigInt, Address } from "@graphprotocol/graph-ts";
 import {
-  YourContract,
-  SetPurpose,
+  InstrumentCreated,
+  SetPurpose
 } from "../generated/YourContract/YourContract";
-import { Purpose, Sender } from "../generated/schema";
+import { Instrument } from '../generated/schema'
 
 export function handleSetPurpose(event: SetPurpose): void {
-  let senderString = event.params.sender.toHexString();
 
-  let sender = Sender.load(senderString);
+}
 
-  if (sender === null) {
-    sender = new Sender(senderString);
-    sender.address = event.params.sender;
-    sender.createdAt = event.block.timestamp;
-    sender.purposeCount = BigInt.fromI32(1);
-  } else {
-    sender.purposeCount = sender.purposeCount.plus(BigInt.fromI32(1));
-  }
+export function handleInstrumentCreated(event: InstrumentCreated): void {
 
-  let purpose = new Purpose(
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-  );
+  let instrument = new Instrument(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
 
-  purpose.purpose = event.params.purpose;
-  purpose.sender = senderString;
-  purpose.createdAt = event.block.timestamp;
-  purpose.transactionHash = event.transaction.hash.toHex();
+  instrument.base = event.params.base.toString()
+  instrument.quote = event.params.quote.toString()
+  instrument.liquiditySource = 'YIELD'
+  instrument.maturity = event.params.maturity
+  instrument.symbol = event.params.symbol.toString()
 
-  purpose.save();
-  sender.save();
+  instrument.save()
+
 }

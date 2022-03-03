@@ -16,10 +16,17 @@ dataSources:
       entities:
         - Purpose
         - Sender
+        - Instrument
+        - Position
+        - Trader
       abis:
         - name: YourContract
           file: ./abis/localhost_YourContract.json
       eventHandlers:
         - event: SetPurpose(address,string)
           handler: handleSetPurpose
+        - event: InstrumentCreated(bytes32,bytes32,bytes32,uint32)
+          handler: handleInstrumentCreated
       file: ./src/mapping.ts
+
+
